@@ -1,0 +1,25 @@
+{
+  "name": "funkysheep-ui",
+  "version": "1.0.0",
+  "description": "Nuxt UI components",
+  "main": "nuxt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FunkySheepStudio/funkysheep-ui.git"
+  },
+  "keywords": [
+    "nuxt",
+    "ui",
+    "funkysheep",
+    "components"
+  ],
+  "author": "Funkysheep",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FunkySheepStudio/funkysheep-ui/issues"
+  },
+  "homepage": "https://github.com/FunkySheepStudio/funkysheep-ui#readme"
+}
