@@ -1,5 +1,7 @@
 <template>
-  <router-link :to="to">
+  <router-link
+    :to="to"
+  >
     <v-img
       class="Logo"
       alt="Funky Sheep Logo"
@@ -15,11 +17,11 @@ export default {
     src: {
       type: String,
       default: '/img/logo.png'
-      }
-    },
+      },
     to: {
       type: String,
       default: '/'
       }
+    }
   }
 </script>
