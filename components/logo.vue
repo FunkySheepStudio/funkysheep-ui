@@ -13,15 +13,15 @@
 </template>
 <script>
 export default {
-  props: {
+  props:{
     src: {
       type: String,
       default: '/img/logo.png'
-      },
+    },
     to: {
       type: String,
       default: '/'
-      }
     }
   }
+}
 </script>
