@@ -3,6 +3,8 @@
     class="Logo"
     alt="Funky Sheep Logo"
     :src="src"
+    max-height="50"
+    max-width="50"
   />
 </template>
 <script>
