@@ -1,24 +1,26 @@
 <template>
   <section>
     <v-btn
-      :hidden="!$vuetify.breakpoint.mobile"
       fab
       elevation="0"
       x-small
       color="primary"
-      @click="mobileMenu = !mobileMenu"
+      href="https://github.com/FunkySheepStudio/"
+      target="_blank"
+      :hidden="$vuetify.breakpoint.mobile"
     >
       <v-icon dark>
-        mdi-menu
+        mdi-github
       </v-icon>
     </v-btn>
     <v-btn
-      :hidden="!$vuetify.breakpoint.mobile"
       fab
       elevation="0"
       x-small
-      color="primary"
-      @click="mobileMenu = !mobileMenu"
+      color="#BA68C8"
+      href="https://discord.gg/9PWWDHPeJ9"
+      target="_blank"
+      :hidden="$vuetify.breakpoint.mobile"
     >
       <v-icon dark>
         mdi-discord
@@ -28,15 +30,5 @@
 </template>
 <script>
 export default {
-  props:{
-    src: {
-      type: String,
-      default: '/img/logo.png'
-    },
-    to: {
-      type: String,
-      default: '/'
-    }
-  }
 }
 </script>
