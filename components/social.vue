@@ -7,7 +7,6 @@
       color="primary"
       href="https://github.com/FunkySheepStudio/"
       target="_blank"
-      :hidden="$vuetify.breakpoint.mobile"
     >
       <v-icon dark>
         mdi-github
@@ -20,7 +19,6 @@
       color="#BA68C8"
       href="https://discord.gg/9PWWDHPeJ9"
       target="_blank"
-      :hidden="$vuetify.breakpoint.mobile"
     >
       <v-icon dark>
         mdi-discord
