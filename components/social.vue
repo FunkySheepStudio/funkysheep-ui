@@ -24,6 +24,18 @@
         mdi-discord
       </v-icon>
     </v-btn>
+    <v-btn
+      fab
+      elevation="0"
+      x-small
+      color="#f7931a"
+      href="/studio/donate"
+      target="_blank"
+    >
+      <v-icon dark>
+        mdi-bitcoin
+      </v-icon>
+    </v-btn>
   </section>
 </template>
 <script>
