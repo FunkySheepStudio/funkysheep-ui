@@ -2,47 +2,52 @@
   <section>
     <v-btn
       fab
-      elevation="0"
-      x-small
-      color="black"
+      color="white"
       href="https://github.com/FunkySheepStudio/"
+      small
       target="_blank"
     >
-      <v-icon>
+      <v-icon
+        large
+      >
         mdi-github
       </v-icon>
     </v-btn>
     <v-btn
       fab
-      elevation="0"
-      x-small
+      small
       color="#BA68C8"
       href="https://discord.gg/9PWWDHPeJ9"
       target="_blank"
     >
-      <v-icon dark>
+      <v-icon
+        medium
+      >
         mdi-discord
       </v-icon>
     </v-btn>
     <v-btn
       fab
-      elevation="0"
-      x-small
+      small
       color="#E62117"
       href="https://www.youtube.com/channel/UCsJOvjzcYiil14bsKpZxgeA"
+      target="_blank"
     >
-      <v-icon dark>
+      <v-icon
+        large
+      >
         mdi-youtube
       </v-icon>
     </v-btn>
     <v-btn
       fab
-      elevation="0"
-      x-small
+      small
       color="#f7931a"
       href="/studio/donate"
     >
-      <v-icon dark>
+      <v-icon
+        large
+      >
         mdi-bitcoin
       </v-icon>
     </v-btn>
