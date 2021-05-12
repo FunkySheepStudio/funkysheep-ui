@@ -30,7 +30,6 @@
       x-small
       color="#f7931a"
       href="/studio/donate"
-      target="_blank"
     >
       <v-icon dark>
         mdi-bitcoin
