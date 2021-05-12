@@ -28,6 +28,17 @@
       fab
       elevation="0"
       x-small
+      color="#E62117"
+      href="https://www.youtube.com/channel/UCsJOvjzcYiil14bsKpZxgeA"
+    >
+      <v-icon dark>
+        mdi-youtube
+      </v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      elevation="0"
+      x-small
       color="#f7931a"
       href="/studio/donate"
     >
