@@ -8,7 +8,7 @@
       href="https://github.com/FunkySheepStudio/"
       target="_blank"
     >
-      <v-icon dark>
+      <v-icon>
         mdi-github
       </v-icon>
     </v-btn>
