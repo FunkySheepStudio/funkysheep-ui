@@ -4,7 +4,7 @@
       fab
       elevation="0"
       x-small
-      color="primary"
+      color="black"
       href="https://github.com/FunkySheepStudio/"
       target="_blank"
     >
