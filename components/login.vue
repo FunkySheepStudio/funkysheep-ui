@@ -114,6 +114,7 @@ export default {
           })
           .then((auth) => {
             localStorage.setItem('_id', auth.user._id)
+            this._id = auth.user._id
             this.showForm = false
           })
           .catch((err) => {
@@ -164,7 +165,7 @@ export default {
     process () {
       this.$store.dispatch('auth/logout')
 
-      if (this.mode = 'Save') { // Update the current profil
+      if (this.mode === 'Save') { // Update the current profil
         this.patch([
           this._id,
           {
