@@ -22,6 +22,7 @@
           User
         </v-card-title>
         <v-card-text>
+          {{ $data._id }}
           <v-text-field
             v-model="login"
             label="Login"
@@ -64,7 +65,7 @@ export default {
     //  Create the local storage if the user do not exist localy
     if (!localStorage.getItem('_id')) {
       localStorage.setItem('_id', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
-      localStorage.setItem('login', '')
+      localStorage.setItem('login', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
       localStorage.setItem('password', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
     }
 
@@ -78,13 +79,12 @@ export default {
         if (!exist) {
           this.create({
             _id: localStorage.getItem('_id'),
-            login: '',
-            password: localStorage.getItem('password')
+            login: this.login,
+            password: this.password
           })
-          .then((user) => {
-            this.login = user.login
-            this.auth()
-          })
+            .then(() => {
+              this.auth()
+            })
         } else {
           this.auth()
         }
@@ -99,24 +99,27 @@ export default {
             accessToken: localStorage.getItem('feathers-jwt'),
             strategy: 'jwt'
           })
+          .then((auth) => {
+            this.showForm = false
+          })
           .catch(() => {
             console.log('Cannot Auth jwt')
+            console.log(err)
           })
-        } else if (this.password !== null) {
-          if (this.login = '') {
-
-          }
-          
+        } else {
           this.$store.dispatch('auth/authenticate', { //  Try the local auth
-            _id: localStorage.getItem('login'),
-            password: localStorage.getItem('password'),
+            login: this.login,
+            password: this.password,
             strategy: 'local'
           })
-          .catch(() => {
-            console.log('Cannot Auth local')
+          .then((auth) => {
+            localStorage.setItem('_id', auth.user._id)
+            this.showForm = false
           })
-        } else { // Password not saved, show the login primpt
-          this.showForm = true
+          .catch((err) => {
+            console.log('Cannot Auth local')
+            console.log(err)
+          })
         }
       }
     },
@@ -161,24 +164,25 @@ export default {
     process () {
       this.$store.dispatch('auth/logout')
 
-      if (this.mode = 'Save') {
+      if (this.mode = 'Save') { // Update the current profil
         this.patch([
-          localStorage.getItem('login'),
+          this._id,
           {
-            _id: this.login,
-            password: this.password,
-            guest: false
+            login: this.login,
+            password: this.password
           }
         ])
+          .then(() => {
+            localStorage.setItem('login', this.login)
+            localStorage.setItem('password', this.password)
+            this.auth()
+          })
+      } else { // Switch profil
+        localStorage.setItem('login', this.login)
+        localStorage.setItem('password', this.password)
+        localStorage.removeItem('feathers-jwt')
+        this.auth()
       }
-
-      this.auth()
-
-      localStorage.setItem('login', this.login),
-      localStorage.setItem('password', this.password),
-      localStorage.removeItem('feathers-jwt')
-
-      this.showForm = false
     }
   }
 }
