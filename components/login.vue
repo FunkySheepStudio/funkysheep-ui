@@ -2,7 +2,7 @@
   <section>
     <v-btn
       fab
-      color="white"
+      :color="$store.getters['auth/isAuthenticated'] ? 'red' : 'white'"
       small
       target="_blank"
       @click="showForm = !showForm"
@@ -15,7 +15,6 @@
     </v-btn>
     <v-dialog
       :value="showForm"
-      persistent
     >
       <v-card>
         <v-card-title>
@@ -164,26 +163,27 @@ export default {
     },
     process () {
       this.$store.dispatch('auth/logout')
-
-      if (this.mode === 'Save') { // Update the current profil
-        this.patch([
-          this._id,
-          {
-            login: this.login,
-            password: this.password
-          }
-        ])
-          .then(() => {
-            localStorage.setItem('login', this.login)
-            localStorage.setItem('password', this.password)
-            this.auth()
-          })
-      } else { // Switch profil
-        localStorage.setItem('login', this.login)
-        localStorage.setItem('password', this.password)
-        localStorage.removeItem('feathers-jwt')
-        this.auth()
-      }
+        .then(() => {
+          if (this.mode === 'Save') { // Update the current profil
+          this.patch([
+            this._id,
+            {
+              login: this.login,
+              password: this.password
+            }
+          ])
+            .then(() => {
+              localStorage.setItem('login', this.login)
+              localStorage.setItem('password', this.password)
+              location.reload()
+            })
+        } else { // Switch profil
+          localStorage.setItem('login', this.login)
+          localStorage.setItem('password', this.password)
+          localStorage.removeItem('feathers-jwt')
+          location.reload()
+        }
+      })
     }
   }
 }
