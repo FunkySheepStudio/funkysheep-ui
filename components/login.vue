@@ -58,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('users', { users: 'find', get: 'get' })
+    ...mapGetters('/api/system/users', { users: 'find', get: 'get' })
   },
   mounted () {
     //  Create the local storage if the user do not exist localy
@@ -90,7 +90,7 @@ export default {
       })
   },
   methods: {
-    ...mapActions('users', { findUsers: 'find', create: 'create', patch: 'patch' }),
+    ...mapActions('/api/system/users', { findUsers: 'find', create: 'create', patch: 'patch' }),
     auth () {
       if (!this.$store.getters['auth/isAuthenticated']) {
         if (localStorage.getItem('feathers-jwt')) { //  Try the jwt auth
