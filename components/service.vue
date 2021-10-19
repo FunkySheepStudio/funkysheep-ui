@@ -18,7 +18,7 @@
       >
         <template v-slot:body="{ items, headers }">
           <tbody>
-            <tr v-for="(item,idx,k) in items" :key="idx">
+            <tr v-for="(item,idx) in items" :key="idx">
               <td v-for="(header,key) in headers" :key="key">
                 <v-edit-dialog
                 > {{item[header.value]}}
@@ -32,30 +32,29 @@
                   </template>
                 </v-edit-dialog>
               </td>
+              <td>
+                <v-btn
+                  @click="remove(item._id)"
+                >
+                  <v-icon
+                    color="red"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </td>
             </tr>
           </tbody>
         </template>
-        <!-- <template v-for="header in headers" v-slot:header.value="props">
-          <v-edit-dialog
-            :return-value.sync="props.value"
-            @save="save"
-            @cancel="cancel"
-            @open="open"
-            @close="close"
-          >
-            {{ props.value}}
-            <template v-slot:input>
-              <v-text-field
-                v-model="item"
-                :rules="[max25chars]"
-                label="Edit"
-                single-line
-                counter
-              ></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template> -->
       </v-data-table>
+      <v-card-actions>
+        <v-btn
+            color="primary"
+            @click="create()"
+          >
+            New Item
+        </v-btn>
+      </v-card-actions>
     </v-card>
     Fields
     <v-data-table
@@ -126,6 +125,19 @@ export default {
       let params = {}
 
       this.$store.dispatch([this.service]+ '/patch', [_id, data, params])
+    },
+    remove(_id) {
+      this.$store.dispatch([this.service]+ '/remove', _id)
+    },
+    create() {
+      let data = {}
+
+      this.headers.forEach(header => {
+        if (header.value != '_id') {
+          data[header.value] = ''
+        }
+      });
+      this.$store.dispatch([this.service]+ '/create', data)
     }
   }
 }
