@@ -15,7 +15,47 @@
       <v-data-table
         :headers="headers"
         :items="list.data"
-      />
+      >
+        <template v-slot:body="{ items, headers }">
+          <tbody>
+            <tr v-for="(item,idx,k) in items" :key="idx">
+              <td v-for="(header,key) in headers" :key="key">
+                <v-edit-dialog
+                > {{item[header.value]}}
+                  <template v-slot:input>
+                    <v-text-field
+                      @change="update(item._id, header.value, $event)"
+                      :value="item[header.value]"
+                      label="Edit"
+                      single-line
+                    ></v-text-field>
+                  </template>
+                </v-edit-dialog>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+        <!-- <template v-for="header in headers" v-slot:header.value="props">
+          <v-edit-dialog
+            :return-value.sync="props.value"
+            @save="save"
+            @cancel="cancel"
+            @open="open"
+            @close="close"
+          >
+            {{ props.value}}
+            <template v-slot:input>
+              <v-text-field
+                v-model="item"
+                :rules="[max25chars]"
+                label="Edit"
+                single-line
+                counter
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template> -->
+      </v-data-table>
     </v-card>
     Fields
     <v-data-table
@@ -79,7 +119,14 @@ export default {
     this.$store.dispatch([this.service]+ '/find')
   },
   methods: {
-    //  ...mapActions('/api/system/services', { findService: 'find' })
+    update(_id, field, value) {
+      let data = {}
+      data[field] = value
+
+      let params = {}
+
+      this.$store.dispatch([this.service]+ '/patch', [_id, data, params])
+    }
   }
 }
 </script>
