@@ -2,15 +2,7 @@
   <section>
     <v-card>
       <v-card-title>
-        Parameters
-      </v-card-title>
-      <v-card-text>
-        Endpoint: {{ service }}
-      </v-card-text>
-    </v-card>
-    <v-card>
-      <v-card-title>
-        Data
+        {{ service }}
       </v-card-title>
       <v-data-table
         :headers="headers"
@@ -56,11 +48,17 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    Fields
-    <v-data-table
-      :headers="fieldsHeaders"
-      :items="fieldsData"
-    />
+    <v-card
+      v-if="!hideFields"
+    >
+      <v-card-title>
+        Fields
+      </v-card-title>
+      <v-data-table
+        :headers="fieldsHeaders"
+        :items="fieldsData"
+      />
+    </v-card>
   </section>
 </template>
 <script>
@@ -70,6 +68,10 @@ export default {
     service: {
       type: String,
       default: ''
+    },
+    hideFields: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
