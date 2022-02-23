@@ -1,6 +1,6 @@
 {
   "name": "net.funkysheep.server.ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nuxt UI components",
   "main": "nuxt.js",
   "scripts": {

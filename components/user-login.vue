@@ -2,7 +2,6 @@
   <section>
     <v-btn
       fab
-      :color="$store.getters['auth/isAuthenticated'] ? 'red' : 'white'"
       small
       target="_blank"
       @click="showForm = !showForm"
@@ -14,31 +13,58 @@
       </v-icon>
     </v-btn>
     <v-dialog
-      :value="showForm"
+      v-model="showForm"
+      :persistent="!$store.state.auth.user"
     >
-      <v-card>
+      <v-tabs
+        v-if="!$store.state.auth.user"
+      >
+        <v-tab>
+          Login
+        </v-tab>
+        <v-tab-item>
+          <v-card>
+            <v-card-text>
+              {{ $data._id }}
+              <v-text-field
+                v-model="login"
+                label="Login"
+              />
+              <v-text-field
+                v-model="password"
+                label="Password"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
+              />
+              <v-btn
+                @click="Login()"
+              >
+                Login
+              </v-btn>
+              {{ message }}
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab>
+          Create Account
+        </v-tab>
+        <v-tab-item>
+          <v-card>
+            <v-card-text>
+              <funkysheep-user-profile/>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+      <v-card
+        v-if="$store.state.auth.user"
+      >
         <v-card-title>
-          User
+          Profile
         </v-card-title>
         <v-card-text>
-          {{ $data._id }}
-          <v-text-field
-            v-model="login"
-            label="Login"
-            @input="setMode($event)"
-          />
-          <v-text-field
-            v-model="password"
-            label="Password"
-            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showPassword ? 'text' : 'password'"
-            @click:append="showPassword = !showPassword"
-          />
-          <v-btn
-            @click="process()"
-          >
-            {{ mode }}
-          </v-btn>
+          <funkysheep-user-profile/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -54,7 +80,8 @@ export default {
       password: '',
       login: '',
       showPassword: false,
-      mode: 'Save'
+      message: '',
+      isAuthenticated: false
     }
   },
   computed: {
@@ -62,18 +89,18 @@ export default {
   },
   mounted () {
     //  Create the local storage if the user do not exist localy
-    if (!localStorage.getItem('_id')) {
+    /*if (!localStorage.getItem('_id')) {
       localStorage.setItem('_id', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
       localStorage.setItem('login', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
       localStorage.setItem('password', Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
-    }
+    }*/
 
     this._id = localStorage.getItem('_id')
     this.login = localStorage.getItem('login')
     this.password = localStorage.getItem('password')
 
     // Create the database user if the user do not exist in database
-    this._idExist(localStorage.getItem('_id'))
+    /*this._idExist(localStorage.getItem('_id'))
       .then((exist) => {
         if (!exist) {
           this.create({
@@ -87,11 +114,12 @@ export default {
         } else {
           this.auth()
         }
-      })
+      })*/
+      this.Auth()
   },
   methods: {
     ...mapActions('/api/system/users', { findUsers: 'find', create: 'create', patch: 'patch' }),
-    auth () {
+    Auth () {
       if (!this.$store.getters['auth/isAuthenticated']) {
         if (localStorage.getItem('feathers-jwt')) { //  Try the jwt auth
           this.$store.dispatch('auth/authenticate', {
@@ -103,23 +131,29 @@ export default {
           })
           .catch(() => {
             console.log('Cannot Auth jwt')
-            console.log(err)
+            this.message = err
           })
         } else {
-          this.$store.dispatch('auth/authenticate', { //  Try the local auth
+          if (this.login && this.password)
+          {
+            this.$store.dispatch('auth/authenticate', { //  Try the local auth
             login: this.login,
             password: this.password,
             strategy: 'local'
-          })
-          .then((auth) => {
-            localStorage.setItem('_id', auth.user._id)
-            this._id = auth.user._id
-            this.showForm = false
-          })
-          .catch((err) => {
-            console.log('Cannot Auth local')
-            console.log(err)
-          })
+            })
+            .then((auth) => {
+              localStorage.setItem('_id', auth.user._id)
+              this._id = auth.user._id
+              this.showForm = false
+            })
+            .catch((err) => {
+              this.showForm = true;
+              console.log('Cannot Auth local')
+              this.message = err
+            })
+          } else {
+            this.showForm = true;
+          }
         }
       }
     },
@@ -151,39 +185,12 @@ export default {
           }
         })
     },
-    setMode (login) {
-      this.loginExist(login)
-        .then((exist) => {
-          if (exist) {
-            this.mode = 'Login'
-          } else {
-            this.mode = 'Save'
-          }
-        })
-    },
-    process () {
-      this.$store.dispatch('auth/logout')
-        .then(() => {
-          if (this.mode === 'Save') { // Update the current profil
-          this.patch([
-            this._id,
-            {
-              login: this.login,
-              password: this.password
-            }
-          ])
-            .then(() => {
-              localStorage.setItem('login', this.login)
-              localStorage.setItem('password', this.password)
-              location.reload()
-            })
-        } else { // Switch profil
-          localStorage.setItem('login', this.login)
-          localStorage.setItem('password', this.password)
-          localStorage.removeItem('feathers-jwt')
-          location.reload()
-        }
-      })
+    Login () {
+      localStorage.setItem('login', this.login)
+      localStorage.setItem('password', this.password)
+      localStorage.removeItem('feathers-jwt')
+      this.Auth()
+      
     }
   }
 }
